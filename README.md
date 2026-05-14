@@ -57,14 +57,20 @@ Lalu ikuti langkah Linux di atas.
 
 Masuk ke direktori project, lalu jalankan:
 
+### Linux / macOS / MSYS2 Terminal
 ```bash
 make
 ```
 
-Output binary akan tersimpan di `bin/scanner`.
+### Windows (PowerShell)
+Jika menggunakan MSYS2 tetapi ingin build dari PowerShell:
+```powershell
+C:\msys64\usr\bin\bash.exe -c "export PATH=/mingw64/bin:/usr/bin:$PATH && make"
+```
+
+Output binary akan tersimpan di `bin/scanner` (Linux/macOS) atau `bin/scanner.exe` (Windows).
 
 Untuk membersihkan hasil build:
-
 ```bash
 make clean
 ```

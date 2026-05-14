@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Iinclude -g
-LDFLAGS = -lssl -lcrypto
+LDFLAGS = -lssl -lcrypto -lws2_32 -lgdi32 -lcrypt32
 
 SRC_DIR = src
 OBJ_DIR = obj
