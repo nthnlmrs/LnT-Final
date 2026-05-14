@@ -1,0 +1,13 @@
+# Build Artifacts
+bin/
+obj/
+*.o
+scanner
+
+# Data Files
+data/
+
+# OS/Editor Files
+.DS_Store
+*.swp
+*~

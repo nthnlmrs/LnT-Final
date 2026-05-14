@@ -1,0 +1,83 @@
+#include "common.h"
+#include "csv_helper.h"
+#include "logger.h"
+#include "cert_db.h"
+#include "network_graph.h"
+#include "scanner.h"
+
+static void clear_buffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {}
+}
+
+int main() {
+#ifdef _WIN32
+    WSADATA wsaData;
+    WSAStartup(MAKEWORD(2, 2), &wsaData);
+#endif
+
+    ensure_data_directory();
+    add_log("System Started. Initializing Scanner.");
+    local_device = add_device("Localhost", "127.0.0.1", "Good");
+
+    int choice;
+    char domain[256];
+
+    do {
+        printf("\n===================================\n");
+        printf(" REAL SSL/TLS & TCP SCANNER \n");
+        printf("===================================\n");
+        printf("1. Scan Domain / IP Baru\n");
+        printf("2. Lihat Topologi Jaringan (Graph)\n");
+        printf("3. Lihat Database Sertifikat (AVL)\n");
+        printf("4. Lihat Activity Log (DLL)\n");
+        printf("0. Keluar\n");
+        printf("Pilih menu: ");
+
+        if (scanf("%d", &choice) != 1) {
+            clear_buffer();
+            printf("Input tidak valid.\n");
+            continue;
+        }
+
+        clear_buffer();
+
+        switch (choice) {
+            case 1:
+                printf("Masukkan Domain (contoh: google.com): ");
+                if (fgets(domain, sizeof(domain), stdin)) {
+                    domain[strcspn(domain, "\n")] = 0;
+                    if (strlen(domain) > 0) {
+                        scan_target(domain);
+                    }
+                }
+                break;
+            case 2:
+                print_graph();
+                break;
+            case 3:
+                printf("\n--- DATABASE SERTIFIKAT (AVL TREE) ---\n");
+                print_certs(avl_root);
+                if (avl_root == NULL) {
+                    printf("Belum ada sertifikat tersimpan.\n");
+                }
+                break;
+            case 4:
+                print_logs();
+                break;
+            case 0:
+                printf("Menutup scanner...\n");
+                add_log("System Closed. Scanner stopped.");
+                break;
+            default:
+                printf("Pilihan tidak valid.\n");
+        }
+
+    } while (choice != 0);
+
+#ifdef _WIN32
+    WSACleanup();
+#endif
+
+    return 0;
+}
