@@ -1,6 +1,10 @@
 CC = gcc
-CFLAGS = -Wall -Iinclude -g
-LDFLAGS = -lssl -lcrypto -lws2_32 -lgdi32 -lcrypt32
+CFLAGS = -Wall -Iinclude -g $(shell pkg-config --cflags gtk+-3.0)
+LDFLAGS = -lssl -lcrypto
+ifeq ($(OS),Windows_NT)
+    LDFLAGS += -lws2_32 -lgdi32 -lcrypt32
+endif
+LDFLAGS += $(shell pkg-config --libs gtk+-3.0)
 
 SRC_DIR = src
 OBJ_DIR = obj
